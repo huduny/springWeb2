@@ -52,7 +52,7 @@
 					value="<%=member.getMemName()%>" /><span class="error"><%=errors.get("memName")%></span></td>
 			</tr>
 			<tr>
-				<th>주민번호1</th>
+				<th>주민번호11</th>
 				<td><input type="text" name="memRegno1"
 					value="<%=member.getMemRegno1()%>" /><span class="error"><%=errors.get("memRegno1")%></span></td>
 			</tr>
