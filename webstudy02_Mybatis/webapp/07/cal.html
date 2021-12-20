@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+
+    <title>calendar</title>
+
+    <style>
+        table {
+            clear: both;
+        }
+        th {
+            height: 50px;
+            width: 70px;
+            background-color:  yellow;
+        }
+        td {
+            text-align: center;
+            height: 50px;
+            width: 70px;
+            background-color: #FFFDC5;  
+        }
+        input {
+            height: 50px;
+            width: 70px;
+            border: none;
+            background-color:  yellow;
+            font-size: 30px;
+        }
+        #inputA{
+            height: 25px;
+            width: 60px;
+            border: thin;
+            background-color:  lightgray;
+            font-size: 15px;
+        }
+        .year_mon{
+            font-size: 25px;
+        }
+        .colToday{
+            background-color: #FFA07A;
+        }
+		#header{
+			float: left;
+		}
+    </style>
+
+    <script>
+        $(function(){
+            var today = new Date();
+            var date = new Date();           
+
+            $("input[name=preMon]").click(function() { // 이전달
+                $("#calendar > tbody > td").remove();
+                $("#calendar > tbody > tr").remove();
+                today = new Date ( today.getFullYear(), today.getMonth()-1, today.getDate());
+                buildCalendar();
+            })
+            
+            $("input[name=nextMon]").click(function(){ //다음달
+                $("#calendar > tbody > td").remove();
+                $("#calendar > tbody > tr").remove();
+                today = new Date ( today.getFullYear(), today.getMonth()+1, today.getDate());
+                buildCalendar();
+            })
+
+
+            function buildCalendar() {
+                
+                nowYear = today.getFullYear();
+                nowMonth = today.getMonth();
+                firstDate = new Date(nowYear,nowMonth,1).getDate();
+                firstDay = new Date(nowYear,nowMonth,1).getDay(); //1st의 요일
+                lastDate = new Date(nowYear,nowMonth+1,0).getDate();
+
+                if((nowYear%4===0 && nowYear % 100 !==0) || nowYear%400===0) { //윤년 적용
+                    lastDate[1]=29;
+                }
+
+                $(".year_mon").text(nowYear+"년 "+(nowMonth+1)+"월");
+
+                for (i=0; i<firstDay; i++) { //첫번째 줄 빈칸
+                    $("#calendar tbody:last").append("<td></td>");
+                }
+                for (i=1; i <=lastDate; i++){ // 날짜 채우기
+                    plusDate = new Date(nowYear,nowMonth,i).getDay();
+                    if (plusDate==0) {
+                        $("#calendar tbody:last").append("<tr></tr>");
+                    }
+                    $("#calendar tbody:last").append("<td class='date'>"+ i +"</td>");
+                }
+                if($("#calendar > tbody > td").length%7!=0) { //마지막 줄 빈칸
+                    for(i=1; i<= $("#calendar > tbody > td").length%7; i++) {
+                        $("#calendar tbody:last").append("<td></td>");
+                    }
+                }
+                $(".date").each(function(index){ // 오늘 날짜 표시
+                    if(nowYear==date.getFullYear() && nowMonth==date.getMonth() && $(".date").eq(index).text()==date.getDate()) {
+                        $(".date").eq(index).addClass('colToday');
+                    }
+                }) 
+            }
+            buildCalendar();
+
+
+        })
+    </script>
+
+</head>
+<body>
+<h1>2020, November</h1>
+<div id="header">
+<input type="text" id="inputA">
+<form>
+  <select name="language" >
+    <option value="none">=== 선택 ===</option>
+    <option value="January">January</option>
+    <option value="February">February</option>
+    <option value="March">March</option>
+    <option value="April">April</option>
+    <option value="May">May</option>
+    <option value="June">June</option>
+    <option value="July">July</option>
+    <option value="August">August</option>
+    <option value="September">September</option>
+    <option value="October">October</option>
+    <option value="November">November</option>
+    <option value="December">December</option>
+  </select>
+</form>
+<form>
+  <select name="language" >
+    <option value="none">=== 선택 ===</option>
+    <option value="Korean">Korean(한국어)</option>
+    <option value="English">English(영어)</option>
+    <option value="Chinese">Chinese(중국어)</option>
+    <option value="Spanish">Spanish(스페인어)</option>
+  </select>
+</form>
+<form>
+  <select name="language" >
+    <option value="none">=== 선택 ===</option>
+    <option value="korean">한국어</option>
+    <option value="english">영어</option>
+    <option value="chinese">중국어</option>
+    <option value="spanish">스페인어</option>
+  </select>
+</form>
+</div>
+    <table id="calendar">
+        <thead>
+            <tr>
+                <th><input name="preMon" type="button" value="<"></th>
+                <th colspan="5" class="year_mon"></th>
+                <th><input name="nextMon" type="button" value=">"></th>
+            </tr>
+            <tr>
+                <th>일</th>
+                <th>월</th>
+                <th>화</th>
+                <th>수</th>
+                <th>목</th>
+                <th>금</th>
+                <th>토</th>
+            </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</body>
+</html>
